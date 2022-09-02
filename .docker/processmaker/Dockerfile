@@ -15,7 +15,11 @@ RUN apk add --no-cache \
         libzip-dev \
         zip \
         imap-dev \
-        openssl-dev
+        openssl-dev \
+        git \
+        bash \
+        openssh-keygen \
+        openssh-client
 
 RUN docker-php-ext-configure gd --with-freetype --with-webp --with-jpeg  \
     && docker-php-ext-configure imap --with-imap --with-imap-ssl
