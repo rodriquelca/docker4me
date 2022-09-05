@@ -39,8 +39,7 @@ $ git checkout main
 
 **The rest of the commands are to be run from the root of the project.**
 
-Copy `.env.example` to `.env`, both at the root of the project and in `src/backend`:
-
+Create the processmaker projects
 ```
 $ docker exec -it demo-processmaker-1 bash
 $ mkdir src
@@ -82,7 +81,7 @@ $ docker compose run --rm processmaker rake
 
 Start the project:
 
-```
+``` 
 $ docker compose up -d
 ```
 
