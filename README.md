@@ -37,6 +37,28 @@ $ git clone https://github.com/rodriquelca/docker4me.git && cd docker4me
 $ git checkout main
 ```
 
+Copy .env.example to .env:
+
+```
+$ cp .env.example .env
+
+```
+To ensure compatibility across operating systems, specify your system's current user ID in the newly created `.env` at the root of the project, e.g.:
+
+```
+HOST_UID=501
+```
+
+You can obtain that ID by running the following command in a terminal:
+
+```
+$ id -u
+```
+
+Run the following command:
+
+$ docker compose up -d
+
 **The rest of the commands are to be run from the root of the project.**
 
 Create the processmaker projects
@@ -53,17 +75,6 @@ $ git clone git@bitbucket.org:colosa/processmaker.git
 $ exit
 ```
 
-To ensure compatibility across operating systems, specify your system's current user ID in the newly created `.env` at the root of the project, e.g.:
-
-```
-HOST_UID=501
-```
-
-You can obtain that ID by running the following command in a terminal:
-
-```
-$ id -u
-```
 
 The following commands may take a little bit of time, as some Docker images might need downloading.
 
