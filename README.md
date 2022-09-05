@@ -56,8 +56,9 @@ $ id -u
 ```
 
 Run the following command:
-
+```
 $ docker compose up -d
+```
 
 **The rest of the commands are to be run from the root of the project.**
 
