@@ -57,6 +57,12 @@ RUN  sed -i '/memory_limit = 128M/c\memory_limit = 512M' $PHP_INI_DIR/php.ini ;
 #edit error reporting
 RUN  sed -i '/error_reporting = E_ALL/c\error_reporting = E_ALL & ~E_DEPRECATED' $PHP_INI_DIR/php.ini;
 
+
+
+# install ruby
+RUN apk add build-base ruby ruby-dev
+RUN gem install rake ftools closure-compiler compass  rubyzip
+
 # Create user based on provided user ID
 ARG HOST_UID
 RUN adduser --disabled-password --gecos "" --uid $HOST_UID demo
