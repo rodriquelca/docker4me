@@ -70,7 +70,7 @@ $ cd src
 ```
 Create a ssh key [git key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 
-Add this key your bitbucket settings, then clone the processmaker project
+Add this key to your bitbucket settings, then clone the processmaker project
 ```
 $ git clone git@bitbucket.org:colosa/processmaker.git
 $ exit
