@@ -1,4 +1,4 @@
-# Docker for local development all for ProcessMaker 3
+# Docker for local development for ProcessMaker 3 (Stack-N275 alternative)
 
 This repository is for development purposes
 
