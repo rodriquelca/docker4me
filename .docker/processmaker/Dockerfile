@@ -23,15 +23,18 @@ RUN apk add --no-cache \
         openssh-keygen \
         openssh-client \
         bzip2-dev \
-        libmcrypt-dev \
-        openldap
+        libmcrypt-dev
 
 RUN docker-php-ext-configure gd --with-freetype --with-webp --with-jpeg  \
     && docker-php-ext-configure imap --with-imap --with-imap-ssl 
 RUN pecl install mcrypt
 RUN docker-php-ext-enable mcrypt
-RUN docker-php-ext-install pdo_mysql opcache zip gd imap bz2 calendar mysqli soap
+RUN docker-php-ext-install pdo_mysql opcache zip gd imap bz2 calendar mysqli soap   
 
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
+
+# Install PHP extensions
+RUN install-php-extensions ldap
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
@@ -44,9 +47,16 @@ COPY .docker/opcache.ini $PHP_INI_DIR/conf.d/opcache.ini
 RUN mv $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 
 
+## configure php.ini ##
+RUN  sed -i '/short_open_tag = Off/c\short_open_tag = On' $PHP_INI_DIR/php.ini ;
+RUN  sed -i '/post_max_size = 8M/c\post_max_size = 24M' $PHP_INI_DIR/php.ini ;
+RUN  sed -i '/upload_max_filesize = 2M/c\upload_max_filesize = 24M' $PHP_INI_DIR/php.ini ;
+RUN  sed -i '/;date.timezone =/c\date.timezone = America/New_York' $PHP_INI_DIR/php.ini ;
+RUN  sed -i '/expose_php = On/c\expose_php = Off' $PHP_INI_DIR/php.ini ;
+RUN  sed -i '/memory_limit = 128M/c\memory_limit = 512M' $PHP_INI_DIR/php.ini ;
 #edit error reporting
+RUN  sed -i '/error_reporting = E_ALL/c\error_reporting = E_ALL & ~E_DEPRECATED' $PHP_INI_DIR/php.ini;
 
-RUN  sed -i '/error_reporting = E_ALL & ~E_DEPRECATED/c' $PHP_INI_DIR/php.ini;
 # Create user based on provided user ID
 ARG HOST_UID
 RUN adduser --disabled-password --gecos "" --uid $HOST_UID demo
