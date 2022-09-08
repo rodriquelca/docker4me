@@ -4,7 +4,7 @@ FROM php:7.4-fpm-alpine
 # Maintainer
 LABEL maintainer="rodrigo@processmaker.com"
 
-LABEL processmaker-stack="N275"
+LABEL processmaker-stack="pm4"
 
 # Install extensions
 RUN apk add --no-cache \
@@ -23,15 +23,18 @@ RUN apk add --no-cache \
         openssh-keygen \
         openssh-client \
         bzip2-dev \
-        libmcrypt-dev
+        libmcrypt-dev \
+        autoconf g++ imagemagick imagemagick-dev libtool make pcre-dev \
+        nodejs npm
 
 RUN docker-php-ext-configure gd --with-freetype --with-webp --with-jpeg  \
     && docker-php-ext-configure imap --with-imap --with-imap-ssl 
-RUN pecl install mcrypt
-RUN docker-php-ext-enable mcrypt
-RUN docker-php-ext-install pdo_mysql opcache zip gd imap bz2 calendar mysqli soap   
+RUN pecl install mcrypt imagick
+RUN docker-php-ext-enable mcrypt imagick
+RUN docker-php-ext-install pdo_mysql opcache zip gd imap bz2 calendar mysqli soap pcntl exif
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
+
 
 # Install PHP extensions
 RUN install-php-extensions ldap
@@ -58,10 +61,6 @@ RUN  sed -i '/memory_limit = 128M/c\memory_limit = 512M' $PHP_INI_DIR/php.ini ;
 RUN  sed -i '/error_reporting = E_ALL/c\error_reporting = E_ALL & ~E_DEPRECATED' $PHP_INI_DIR/php.ini;
 
 
-
-# install ruby
-RUN apk add build-base ruby ruby-dev
-RUN gem install rake ftools closure-compiler compass  rubyzip
 
 # Create user based on provided user ID
 ARG HOST_UID
