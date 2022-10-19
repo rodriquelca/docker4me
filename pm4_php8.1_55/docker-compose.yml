@@ -1,0 +1,64 @@
+version: '3.8'
+
+# Services
+services:
+
+  # Nginx Service
+  nginx:
+    image: nginx:1.21-alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./src/processmaker:/var/www/processmaker
+      - ./.docker/nginx/conf.d:/etc/nginx/conf.d
+      - phpmyadmindata:/var/www/phpmyadmin
+    depends_on:
+      - processmaker
+      - phpmyadmin
+
+  # Backend Service
+  processmaker:
+    build:
+      context: .docker/processmaker
+      args:
+        HOST_UID: $HOST_UID
+    working_dir: /var/www
+    volumes:
+      - ./src:/var/www
+      - ./.docker/processmaker/init:/opt/files/init
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  # MySQL Service
+  mysql:
+    image: mysql/mysql-server:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: demo
+    volumes:
+      - ./.docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - mysqldata:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
+      interval: 5s
+      retries: 10
+
+  # PhpMyAdmin Service
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5-fpm-alpine
+    environment:
+      PMA_HOST: mysql
+    volumes:
+      - phpmyadmindata:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+# Volumes
+volumes:
+
+  mysqldata:
+
+  phpmyadmindata:

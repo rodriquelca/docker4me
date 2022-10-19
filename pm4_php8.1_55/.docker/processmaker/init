@@ -1,0 +1,65 @@
+#!/bin/bash
+
+DIR="/var/www/processmaker"
+
+
+# clone processmaker app
+git clone https://github.com/ProcessMaker/processmaker.git
+
+# mv -n tmp/.* ./ && mv tmp/* ./ && rm -Rf tmp
+# rm -rf "$DIR/.env"
+
+# Install Composer dependencies
+
+cd processmaker
+composer install
+# php artisan processmaker:install
+php artisan processmaker:install --no-interaction \
+    --url=http://processmaker.demo.test \
+    --username=admin \
+    --password=admin123 \
+    --email=admin@processmaker.com \
+    --first-name=Admin \
+    --last-name=User \
+    --db-host=mysql \
+    --db-port=3306 \
+    --db-name=demo \
+    --db-username=root \
+    --db-password=root \
+    --data-driver=mysql \
+    --data-host=mysql \
+    --data-port=3306 \
+    --data-name=demo \
+    --data-username=root \
+    --data-password=root 
+# # Deal with the .env file if necessary
+# if [ ! -f "/var/www/processmaker/.env" ]; then
+#     # Create .env file
+#     cat > "/var/www/processmaker/.env" << EOF
+# APP_NAME=demo
+# APP_ENV=local
+# APP_KEY=
+# APP_DEBUG=true
+# APP_URL=http://processmaker.demo.test
+
+# LOG_CHANNEL=single
+
+# DB_CONNECTION=mysql
+# DB_HOST=mysql
+# DB_PORT=3306
+# DB_DATABASE=demo
+# DB_USERNAME=root
+# DB_PASSWORD=root
+
+# BROADCAST_DRIVER=log
+# CACHE_DRIVER=file
+# QUEUE_CONNECTION=sync
+# SESSION_DRIVER=file
+# EOF
+
+#     # Generate application key
+#     php "/var/www/processmaker/artisan" key:generate --ansi
+# fi
+
+# # Database
+# php "/var/www/processmaker/artisan" migrate
