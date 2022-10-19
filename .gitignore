@@ -1,2 +1,5 @@
 .env
-/src/processmaker
+pm3_stack275/src
+pm3_stack275/.env
+pm4_php8.1/src
+pm4_php8.1/.env
