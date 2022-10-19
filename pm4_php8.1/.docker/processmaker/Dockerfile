@@ -17,18 +17,23 @@ RUN apk add --no-cache \
         openssh-keygen \
         openssh-client \
         bzip2-dev \
-        libmcrypt-dev
+        libmcrypt-dev \
+        docker docker-compose
 
 
-# Install extensions
 # RUN docker-php-ext-install pdo_mysql bcmath opcache gd imap
 RUN docker-php-ext-configure gd --with-freetype --with-webp --with-jpeg  \
     && docker-php-ext-configure imap --with-imap --with-imap-ssl \
     && docker-php-ext-configure pcntl --enable-pcntl
 RUN pecl install mcrypt
+# Import extension installer
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 
 
-RUN docker-php-ext-install pdo_mysql opcache zip gd imap bz2 calendar mysqli soap pcntl exif  
+# Install extensions
+RUN install-php-extensions redis
+
+RUN docker-php-ext-install pdo_mysql opcache zip gd imap bz2 calendar mysqli soap pcntl exif 
 RUN docker-php-ext-enable mcrypt
 RUN docker-php-ext-enable exif
 
@@ -48,4 +53,4 @@ ARG HOST_UID
 RUN adduser --disabled-password --gecos "" --uid $HOST_UID demo
 
 # Switch to that user
-USER demo
+USER root

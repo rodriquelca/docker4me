@@ -24,11 +24,14 @@ services:
         HOST_UID: $HOST_UID
     working_dir: /var/www
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ./src:/var/www
       - ./.docker/processmaker/init:/opt/files/init
     depends_on:
       mysql:
         condition: service_healthy
+      redis:
+        condition: service_started
 
   # MySQL Service
   mysql:
@@ -55,10 +58,17 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-
+  # Redis Service
+  redis:
+    image: redis:6-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
 # Volumes
 volumes:
 
   mysqldata:
 
   phpmyadmindata:
+
+  redisdata:
