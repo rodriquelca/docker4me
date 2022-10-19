@@ -17,7 +17,7 @@ composer install
 php artisan processmaker:install --no-interaction \
     --url=http://processmaker.demo.test \
     --username=admin \
-    --password=admin123 \
+    --password=adminabc \
     --email=admin@processmaker.com \
     --first-name=Admin \
     --last-name=User \
@@ -34,6 +34,9 @@ php artisan processmaker:install --no-interaction \
     --data-password=root \
     --redis-host=redis
 
+#restore URL
+php artisan migrate --seed
+php artisan optimize:clear
 # # Deal with the .env file if necessary
 # if [ ! -f "/var/www/processmaker/.env" ]; then
 #     # Create .env file
