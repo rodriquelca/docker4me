@@ -1,4 +1,4 @@
-# Docker for local web development, part 4: smoothing things out with Bash
+# Docker for local pm4 development, smoothing things out with Bash
 
 ## Content
 
