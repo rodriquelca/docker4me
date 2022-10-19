@@ -33,6 +33,7 @@ php artisan processmaker:install --no-interaction \
     --data-username=root \
     --data-password=root \
     --redis-host=redis
+
 # # Deal with the .env file if necessary
 # if [ ! -f "/var/www/processmaker/.env" ]; then
 #     # Create .env file
