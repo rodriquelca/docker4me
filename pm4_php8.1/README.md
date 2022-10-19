@@ -85,6 +85,14 @@ The frontend application is consuming a simple endpoint from the backend applica
 
 The database data is persisted in its own local directory through the volume `mysqldata`, which is mounted onto MySQL's container.
 
+## Troublesholding
+
+Login credentials
+admin/admin
+
+login page does not work.
+Edit the processmaker .env file and change
+SESSION_DOMAIN=http://processmaker.demo.test by SESSION_DOMAIN=processmaker.demo.tet
 
 
 ## Cleaning up
